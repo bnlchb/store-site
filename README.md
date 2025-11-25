@@ -97,11 +97,6 @@ src/
 
 ## 🔐 Admin Control Room
 
-| Field | Value |
-| --- | --- |
-| Username | `admin` |
-| Password | `REDACTED_ADMIN_PASSWORD` |
-
 - **Orders cockpit** – kanban cards + sortable tables, status filters, exports with timestamps.
 - **Product lab** – manage inventory, featured products, custom text pricing, activation toggles.
 - **Settings console** – shipping fee matrix per Moroccan city, ordering kill switch, branding tweaks.
