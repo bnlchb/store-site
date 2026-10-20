@@ -125,6 +125,407 @@ const sampleProducts = [
     stock: 0,
     tags: ["hoodie", "sport", "daily fit", "haut", "inspiration"],
   },
+  // Nouveaux produits depuis le dossier product
+  {
+    name: "T-shirt Originalfit blanc",
+    description: "T-shirt sportswear blanc. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.38.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.38.jpeg",
+        medium: "/images/products/2026-10-20_20.25.38.jpeg",
+        large: "/images/products/2026-10-20_20.25.38.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Hauts",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["t-shirt", "blanc", "haut", "sportswear"],
+  },
+  {
+    name: "T-shirt Originalfit noir",
+    description: "T-shirt sportswear noir. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.39.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.39.jpeg",
+        medium: "/images/products/2026-10-20_20.25.39.jpeg",
+        large: "/images/products/2026-10-20_20.25.39.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Hauts",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["t-shirt", "noir", "haut", "sportswear"],
+  },
+  {
+    name: "Hoodie Originalfit gris",
+    description: "Hoodie sportswear gris. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.39__1.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.39__1.jpeg",
+        medium: "/images/products/2026-10-20_20.25.39__1.jpeg",
+        large: "/images/products/2026-10-20_20.25.39__1.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Hauts",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["hoodie", "gris", "haut", "sportswear"],
+  },
+  {
+    name: "Sweatshirt Originalfit bleu",
+    description: "Sweatshirt sportswear bleu. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.39__2.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.39__2.jpeg",
+        medium: "/images/products/2026-10-20_20.25.39__2.jpeg",
+        large: "/images/products/2026-10-20_20.25.39__2.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Hauts",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["sweatshirt", "bleu", "haut", "sportswear"],
+  },
+  {
+    name: "Veste Originalfit kaki",
+    description: "Veste sportswear kaki. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.39__3.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.39__3.jpeg",
+        medium: "/images/products/2026-10-20_20.25.39__3.jpeg",
+        large: "/images/products/2026-10-20_20.25.39__3.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Hauts",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["veste", "kaki", "haut", "sportswear"],
+  },
+  {
+    name: "T-shirt Originalfit marine",
+    description: "T-shirt sportswear marine. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.39__4.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.39__4.jpeg",
+        medium: "/images/products/2026-10-20_20.25.39__4.jpeg",
+        large: "/images/products/2026-10-20_20.25.39__4.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Hauts",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["t-shirt", "marine", "haut", "sportswear"],
+  },
+  {
+    name: "Short Originalfit noir",
+    description: "Short sportswear noir. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.40.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.40.jpeg",
+        medium: "/images/products/2026-10-20_20.25.40.jpeg",
+        large: "/images/products/2026-10-20_20.25.40.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Bas",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["short", "noir", "bas", "sportswear"],
+  },
+  {
+    name: "Short Originalfit gris",
+    description: "Short sportswear gris. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.40__1.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.40__1.jpeg",
+        medium: "/images/products/2026-10-20_20.25.40__1.jpeg",
+        large: "/images/products/2026-10-20_20.25.40__1.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Bas",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["short", "gris", "bas", "sportswear"],
+  },
+  {
+    name: "Jogging Originalfit bleu",
+    description: "Pantalon jogging sportswear bleu. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.40__2.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.40__2.jpeg",
+        medium: "/images/products/2026-10-20_20.25.40__2.jpeg",
+        large: "/images/products/2026-10-20_20.25.40__2.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Bas",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["jogging", "bleu", "bas", "sportswear"],
+  },
+  {
+    name: "Pantalon Originalfit noir",
+    description: "Pantalon sportswear noir. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.40__3.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.40__3.jpeg",
+        medium: "/images/products/2026-10-20_20.25.40__3.jpeg",
+        large: "/images/products/2026-10-20_20.25.40__3.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Bas",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["pantalon", "noir", "bas", "sportswear"],
+  },
+  {
+    name: "Legging Originalfit noir",
+    description: "Legging sportswear noir. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.40__4.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.40__4.jpeg",
+        medium: "/images/products/2026-10-20_20.25.40__4.jpeg",
+        large: "/images/products/2026-10-20_20.25.40__4.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Bas",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["legging", "noir", "bas", "sportswear"],
+  },
+  {
+    name: "Casquette Originalfit",
+    description: "Casquette sportswear. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.41.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.41.jpeg",
+        medium: "/images/products/2026-10-20_20.25.41.jpeg",
+        large: "/images/products/2026-10-20_20.25.41.jpeg",
+      }
+    ],
+    sizes: ["Unique"],
+    category: "Accessoires",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["casquette", "accessoire", "tête", "sportswear"],
+  },
+  {
+    name: "Sac à dos Originalfit",
+    description: "Sac à dos sportswear. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.41__1.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.41__1.jpeg",
+        medium: "/images/products/2026-10-20_20.25.41__1.jpeg",
+        large: "/images/products/2026-10-20_20.25.41__1.jpeg",
+      }
+    ],
+    sizes: ["Unique"],
+    category: "Accessoires",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["sac", "dos", "accessoire", "sportswear"],
+  },
+  {
+    name: "Pochette Originalfit",
+    description: "Pochette sportswear. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.41__2.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.41__2.jpeg",
+        medium: "/images/products/2026-10-20_20.25.41__2.jpeg",
+        large: "/images/products/2026-10-20_20.25.41__2.jpeg",
+      }
+    ],
+    sizes: ["Unique"],
+    category: "Accessoires",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["pochette", "accessoire", "sportswear"],
+  },
+  {
+    name: "T-shirt Originalfit rouge",
+    description: "T-shirt sportswear rouge. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.42.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.42.jpeg",
+        medium: "/images/products/2026-10-20_20.25.42.jpeg",
+        large: "/images/products/2026-10-20_20.25.42.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Hauts",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["t-shirt", "rouge", "haut", "sportswear"],
+  },
+  {
+    name: "Hoodie Originalfit rouge",
+    description: "Hoodie sportswear rouge. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.42__1.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.42__1.jpeg",
+        medium: "/images/products/2026-10-20_20.25.42__1.jpeg",
+        large: "/images/products/2026-10-20_20.25.42__1.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Hauts",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["hoodie", "rouge", "haut", "sportswear"],
+  },
+  {
+    name: "Short Originalfit rouge",
+    description: "Short sportswear rouge. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.42__2.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.42__2.jpeg",
+        medium: "/images/products/2026-10-20_20.25.42__2.jpeg",
+        large: "/images/products/2026-10-20_20.25.42__2.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Bas",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["short", "rouge", "bas", "sportswear"],
+  },
+  {
+    name: "T-shirt Originalfit vert",
+    description: "T-shirt sportswear vert. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.43.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.43.jpeg",
+        medium: "/images/products/2026-10-20_20.25.43.jpeg",
+        large: "/images/products/2026-10-20_20.25.43.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Hauts",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["t-shirt", "vert", "haut", "sportswear"],
+  },
+  {
+    name: "Hoodie Originalfit vert",
+    description: "Hoodie sportswear vert. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.43__1.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.43__1.jpeg",
+        medium: "/images/products/2026-10-20_20.25.43__1.jpeg",
+        large: "/images/products/2026-10-20_20.25.43__1.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Hauts",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["hoodie", "vert", "haut", "sportswear"],
+  },
+  {
+    name: "Short Originalfit vert",
+    description: "Short sportswear vert. Visuel depuis la collection product. Prix et disponibilité confirmés sur demande avec Originalfit.",
+    price: 0,
+    images: [
+      {
+        original: "/images/products/2026-10-20_20.25.43__2.jpeg",
+        thumbnail: "/images/products/2026-10-20_20.25.43__2.jpeg",
+        medium: "/images/products/2026-10-20_20.25.43__2.jpeg",
+        large: "/images/products/2026-10-20_20.25.43__2.jpeg",
+      }
+    ],
+    sizes: ["S", "M", "L", "XL"],
+    category: "Bas",
+    isCustomizable: false,
+    customPrice: 0,
+    isActive: true,
+    stock: 0,
+    tags: ["short", "vert", "bas", "sportswear"],
+  },
 ];
 
 // Sample settings data
@@ -136,6 +537,26 @@ const sampleSettings = {
     ["Sac crossbody", 0],
     ["Short training", 0],
     ["Hoodie sport", 0],
+    ["T-shirt Originalfit blanc", 0],
+    ["T-shirt Originalfit noir", 0],
+    ["Hoodie Originalfit gris", 0],
+    ["Sweatshirt Originalfit bleu", 0],
+    ["Veste Originalfit kaki", 0],
+    ["T-shirt Originalfit marine", 0],
+    ["Short Originalfit noir", 0],
+    ["Short Originalfit gris", 0],
+    ["Jogging Originalfit bleu", 0],
+    ["Pantalon Originalfit noir", 0],
+    ["Legging Originalfit noir", 0],
+    ["Casquette Originalfit", 0],
+    ["Sac à dos Originalfit", 0],
+    ["Pochette Originalfit", 0],
+    ["T-shirt Originalfit rouge", 0],
+    ["Hoodie Originalfit rouge", 0],
+    ["Short Originalfit rouge", 0],
+    ["T-shirt Originalfit vert", 0],
+    ["Hoodie Originalfit vert", 0],
+    ["Short Originalfit vert", 0],
   ]),
   customTextPrice: 0,
   shippingFees: new Map([
