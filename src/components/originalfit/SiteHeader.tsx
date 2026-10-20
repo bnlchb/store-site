@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Menu, ShoppingBag, X } from "lucide-react";
@@ -65,12 +66,16 @@ export function SiteHeader() {
       >
         <div className="mx-auto flex h-full max-w-[1500px] items-center justify-between gap-4 px-5 lg:px-10">
           <Link href="/" className="group flex items-center gap-2.5" aria-label="Originalfit — accueil">
-            <span className="h-2.5 w-2.5 bg-ink transition-colors duration-300 group-hover:bg-volt group-hover:ring-1 group-hover:ring-ink" />
-            <span className="font-sans text-[17px] font-black tracking-[-0.045em] sm:text-[19px]">
+            <Image
+              src="/logo.png"
+              alt="Originalfit"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain group-hover:scale-105 transition-transform duration-300"
+              priority
+            />
+            <span className="hidden sm:inline font-sans text-[17px] font-black tracking-[-0.045em] sm:text-[19px]">
               ORIGINALFIT
-            </span>
-            <span className="hidden font-mono text-[9px] uppercase tracking-[0.18em] text-muted sm:inline">
-              / MA
             </span>
           </Link>
 
