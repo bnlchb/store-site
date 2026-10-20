@@ -52,7 +52,7 @@ export function StructuredData() {
         },
         primaryImageOfPage: {
           "@type": "ImageObject",
-          url: `${SITE_URL}/originalfit-og.png`,
+          url: `${SITE_URL}/originalfit-og.jpj`,
           width: 1200,
           height: 630,
         },
@@ -65,7 +65,7 @@ export function StructuredData() {
         description:
           "Sélection sportswear au Maroc — prix et disponibilité confirmés sur demande.",
         url: SITE_URL,
-        image: `${SITE_URL}/originalfit-og.png`,
+        image: `${SITE_URL}/originalfit-og.jpj`,
         address: {
           "@type": "PostalAddress",
           addressCountry: "MA",

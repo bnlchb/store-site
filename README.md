@@ -2,7 +2,7 @@
 
 > Graffiti energy, GSAP choreography, and a data-obsessed admin OS—built with Next.js 14, TypeScript, Tailwind CSS, and MongoDB.
 
-![Hero splash](./docs/readme/hero-section.png)
+![Hero splash](./docs/readme/hero-section.jpj)
 
 <div align="center">
 
@@ -28,27 +28,27 @@
 ## 📸 Visual Tour
 
 ### Landing Flow · Hero Takeover
-![Landing hero](./docs/readme/hero-section.png)
+![Landing hero](./docs/readme/hero-section.jpj)
 - Staggered headline animation + graffiti typographic stack.
 - Auto-hiding nav and magnetic CTA with ripple loaders.
 
 ### Catalog Grid · Product Discovery
-![Product grid](./docs/readme/products-page.png)
+![Product grid](./docs/readme/products-page.jpj)
 - GSAP-staggered product cards with hover lift + quick filter pills.
 - Responsive grid that keeps pricing + CTA in view on all breakpoints.
 
 ### Product Detail · Customization UX
-![Product detail](./docs/readme/tshirt-page.png)
+![Product detail](./docs/readme/tshirt-page.jpj)
 - Zoomable gallery, size selector, custom text upsell, live total chips.
 - Shipping estimator drives transparency before checkout.
 
 ### Admin Dashboard · Desktop Suite
-![Admin dashboard](./docs/readme/admin-dashboard.png)
+![Admin dashboard](./docs/readme/admin-dashboard.jpj)
 - Orders cards + table hybrid, analytics pulse tiles, status filters, brutalist toasts.
 - Export controls (CSV + styled HTML) and protected session handling.
 
 ### Admin On-The-Go · Mobile Snapshot
-![Admin mobile](./docs/readme/admin-mobile.png)
+![Admin mobile](./docs/readme/admin-mobile.jpj)
 - Mobile-responsive admin layout keeps KPI tiles + order management usable on phones.
 - Sticky action bar for quick updates in the field.
 

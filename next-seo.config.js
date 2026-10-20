@@ -18,7 +18,7 @@ const defaultSEOConfig = {
       "Sportswear sélectionné au Maroc. Choisis une inspiration, on vérifie le modèle pour toi.",
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.originalfit.ma"}/originalfit-og.png`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.originalfit.ma"}/originalfit-og.jpj`,
         width: 1200,
         height: 630,
         alt: "Originalfit — Sportswear sélectionné au Maroc",
