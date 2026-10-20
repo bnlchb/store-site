@@ -148,7 +148,7 @@ Content-Type: application/json
 
 {
   "username": "admin",
-  "password": "REDACTED_ADMIN_PASSWORD"
+  "password": "<votre-ADMIN_PASSWORD>"
 }
 ```
 
