@@ -67,7 +67,7 @@ export function SiteHeader() {
         <div className="mx-auto flex h-full max-w-[1500px] items-center justify-between gap-4 px-5 lg:px-10">
           <Link href="/" className="group flex items-center gap-2.5" aria-label="Originalfit — accueil">
             <Image
-              src="/logo.png"
+              src="/logo.jpg"
               alt="Originalfit"
               width={32}
               height={32}
