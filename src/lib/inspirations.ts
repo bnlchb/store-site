@@ -29,7 +29,7 @@ export const INSPIRATIONS: Inspiration[] = [
     filter: "Accessoires",
     sizes: ["39", "40", "41", "42", "43", "44"],
     kind: "sneaker",
-    tone: "#D8FF3E",
+    tone: "#C24657",
     ink: "#111110",
   },
   {

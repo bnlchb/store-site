@@ -21,13 +21,13 @@ body {
     height: 100%;
   }
   * {
-    @apply border-black selection:bg-[#D8FF3E] selection:text-[#111110];
+    @apply border-black selection:bg-[#C24657] selection:text-[#111110];
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-display tracking-tight uppercase;
   }
   a {
-    @apply underline underline-offset-4 decoration-2 hover:decoration-[#D8FF3E];
+    @apply underline underline-offset-4 decoration-2 hover:decoration-[#C24657];
   }
   html {
     scroll-behavior: smooth;
