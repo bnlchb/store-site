@@ -1,19 +1,37 @@
-import { Hero } from "@/components/Hero";
-import { ProductShowcase } from "@/components/ProductShowcase";
-import { PageDescription } from "@/components/SEO/PageDescription";
+import type { Metadata } from "next";
+import { AboutSection } from "@/components/originalfit/AboutSection";
+import { ContactSection } from "@/components/originalfit/ContactSection";
+import { HeroSection } from "@/components/originalfit/HeroSection";
+import { HowItWorksSection } from "@/components/originalfit/HowItWorksSection";
+import { StylesSection } from "@/components/originalfit/StylesSection";
 
-export const metadata = {
-  title: "ENSA Tetouan Merchandise | ENSA Maroc | ENSA OFFLINE Store",
-  description: "ENSA Tetouan official merchandise store - ENSA Maroc | ENSA Morocco. Shop ENSA clothing, ENSA hoodies, ENSA t-shirts for ENSA students and ENSA alumni in Tetouan, Morocco.",
-  keywords: "ENSA, ENSA Tetouan, ENSA Maroc, ENSA Morocco, ENSA merchandise, ENSA hoodies, ENSA t-shirts, ENSA clothing, ENSA students, ENSA alumni, ENSA campus, ENSA community"
+export const metadata: Metadata = {
+  title: "Originalfit — Sportswear sélectionné au Maroc",
+  description:
+    "Originalfit, une sélection sportswear pensée pour accompagner tes journées. Choisis une inspiration, on vérifie le modèle, le prix et le délai avant toute commande. Livraison au Maroc.",
+  keywords: [
+    "Originalfit",
+    "sportswear Maroc",
+    "vêtements de sport Maroc",
+    "sélection sportswear",
+    "style sport",
+    "sneakers Maroc",
+    "hoodie Maroc",
+    "livraison Maroc",
+  ],
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function Home() {
   return (
-    <div>
-      <PageDescription />
-      <Hero />
-      <ProductShowcase />
-    </div>
+    <>
+      <HeroSection />
+      <AboutSection />
+      <StylesSection />
+      <HowItWorksSection />
+      <ContactSection />
+    </>
   );
 }

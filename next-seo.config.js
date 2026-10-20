@@ -1,62 +1,54 @@
 /** @type {import('next-seo').DefaultSeoProps} */
 const defaultSEOConfig = {
-  titleTemplate: '%s | ENSA OFFLINE',
-  defaultTitle: 'ENSA Tetouan Merchandise | ENSA OFFLINE - Official Store',
-  
-  description: 'ENSA Tetouan official merchandise store - ENSA Maroc | ENSA Morocco. Shop ENSA clothing, ENSA hoodies, ENSA t-shirts for ENSA students and ENSA alumni in Tetouan, Morocco.',
-  
-  canonical: 'https://www.ensa-offline.store',
-  
+  titleTemplate: "%s | Originalfit",
+  defaultTitle: "Originalfit — Sportswear sélectionné au Maroc",
+
+  description:
+    "Sportswear sélectionné au Maroc. Choisis une inspiration, on vérifie le modèle pour toi. Prix, disponibilité et livraison confirmés par Originalfit avant toute commande.",
+
+  canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://www.originalfit.ma",
+
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://www.ensa-offline.store',
-    siteName: 'ENSA OFFLINE',
-    title: 'ENSA Tetouan Merchandise | ENSA OFFLINE',
-    description: 'ENSA Tetouan official merchandise store - ENSA Maroc. Shop ENSA clothing for ENSA students and ENSA alumni in Tetouan, Morocco.',
+    type: "website",
+    locale: "fr_FR",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.originalfit.ma",
+    siteName: "Originalfit",
+    title: "Originalfit — Sportswear sélectionné au Maroc",
+    description:
+      "Sportswear sélectionné au Maroc. Choisis une inspiration, on vérifie le modèle pour toi.",
     images: [
       {
-        url: 'https://www.ensa-offline.store/ensa-offline.png?v=2',
+        url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.originalfit.ma"}/originalfit-og.png`,
         width: 1200,
         height: 630,
-        alt: 'ENSA Tetouan Merchandise - ENSA OFFLINE Store',
+        alt: "Originalfit — Sportswear sélectionné au Maroc",
       },
     ],
   },
-  
+
   twitter: {
-    handle: '@ensaoffline',
-    site: '@ensaoffline',
-    cardType: 'summary_large_image',
+    cardType: "summary_large_image",
   },
-  
+
   additionalMetaTags: [
     {
-      name: 'keywords',
-      content: 'ENSA, ENSA Tetouan, ENSA Maroc, ENSA Morocco, ENSA OFFLINE, ENSA merchandise, ENSA store, ENSA clothing, ENSA hoodies, ENSA t-shirts, ENSA university, ENSA campus, ENSA students, ENSA alumni'
+      name: "keywords",
+      content:
+        "Originalfit, sportswear Maroc, vêtements de sport Maroc, sélection sportswear, style sport, sneakers sport, hoodie sport, livraison Maroc",
     },
     {
-      property: 'article:author',
-      content: 'ENSA OFFLINE'
+      name: "author",
+      content: "Originalfit",
     },
     {
-      name: 'geo.region',
-      content: 'MA'
+      name: "geo.region",
+      content: "MA",
     },
     {
-      name: 'geo.placename',
-      content: 'Tetouan'
+      name: "geo.placename",
+      content: "Maroc",
     },
-    {
-      name: 'geo.position',
-      content: '35.5742;-5.3728'
-    },
-    {
-      name: 'ICBM',
-      content: '35.5742, -5.3728'
-    }
   ],
 };
 
 module.exports = defaultSEOConfig;
-

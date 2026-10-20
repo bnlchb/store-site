@@ -1,17 +1,15 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/brand";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://www.ensa-offline.store'
-  
   return {
     rules: [
       {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/admin/', '/api/'],
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin/", "/api/"],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
-  }
+    sitemap: `${SITE_URL}/sitemap.xml`,
+  };
 }
-
