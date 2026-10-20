@@ -26,7 +26,7 @@ MONGODB_DB=ensaoffline
 
 # Admin Configuration
 ADMIN_USERNAME=admin
-ADMIN_PASSWORD=ensa2024
+ADMIN_PASSWORD=<votre-ADMIN_PASSWORD>
 
 # Image Upload Configuration
 MAX_FILE_SIZE=5242880
@@ -212,7 +212,7 @@ The database seeder creates:
 
 ### Access
 - **URL**: `http://localhost:3000/admin`
-- **Login**: `admin` / `ensa2024`
+- **Login**: `admin` / `<votre-ADMIN_PASSWORD>`
 - **Features**: Full CRUD operations
 
 ## API Endpoints

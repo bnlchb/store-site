@@ -148,7 +148,7 @@ Content-Type: application/json
 
 {
   "username": "admin",
-  "password": "ensa2024"
+  "password": "<votre-ADMIN_PASSWORD>"
 }
 ```
 

@@ -109,9 +109,15 @@ export function validateSettingsData(data: any) {
   return errors;
 }
 
-// Authentication utilities
+// Authentication utilities — identifiants via variables d'environnement (.env.local)
 export function validateAdminCredentials(username: string, password: string): boolean {
-  return username === 'admin' && password === 'ensa2024';
+  const expectedUser = process.env.ADMIN_USERNAME;
+  const expectedPassword = process.env.ADMIN_PASSWORD;
+  if (!expectedUser || !expectedPassword) {
+    console.error('ADMIN_USERNAME / ADMIN_PASSWORD manquants dans l\'environnement — authentification refusée.');
+    return false;
+  }
+  return username === expectedUser && password === expectedPassword;
 }
 
 export function createSessionToken(): string {

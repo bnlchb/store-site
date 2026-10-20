@@ -7,27 +7,19 @@ export const dynamic = 'force-dynamic';
 // Ensure Node.js runtime (required for Buffer and multipart handling in some hosts)
 export const runtime = 'nodejs';
 
-// Configure Cloudinary - Using hardcoded values for testing
+// Configure Cloudinary — identifiants exclusivement via variables d'environnement
 const cloudinaryConfig = {
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'df5we7yoo',
-  api_key: process.env.CLOUDINARY_API_KEY || '498946988417326',
-  api_secret: process.env.CLOUDINARY_API_SECRET || '6JX_3v0TJSxsDzwIb3jziUQheEI',
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 };
 
-const isCloudinaryConfigured = cloudinaryConfig.cloud_name && 
-                               cloudinaryConfig.api_key && 
-                               cloudinaryConfig.api_secret;
-
-// Debug logging
-console.log('Cloudinary Environment Check:');
-console.log('CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME || 'Using hardcoded');
-console.log('CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY ? 'SET' : 'Using hardcoded');
-console.log('CLOUDINARY_API_SECRET:', process.env.CLOUDINARY_API_SECRET ? 'SET' : 'Using hardcoded');
-console.log('isCloudinaryConfigured:', isCloudinaryConfigured);
+const isCloudinaryConfigured = !!cloudinaryConfig.cloud_name &&
+                               !!cloudinaryConfig.api_key &&
+                               !!cloudinaryConfig.api_secret;
 
 if (isCloudinaryConfigured) {
   cloudinary.config(cloudinaryConfig);
-  console.log('Cloudinary configured successfully');
 } else {
   console.log('Cloudinary NOT configured - missing configuration');
 }

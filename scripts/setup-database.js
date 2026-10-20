@@ -10,12 +10,17 @@
 const mongoose = require('mongoose');
 const path = require('path');
 
-// Set environment variables directly (fixing the MongoDB URI issues)
-console.log('Setting environment variables...');
-process.env.MONGODB_URI = 'mongodb+srv://abdellah:abdellah123@ensaoffline.k6ywb9v.mongodb.net/ensaoffline';
-process.env.MONGODB_DB = 'ensaoffline';
-process.env.ADMIN_USERNAME = 'admin';
-process.env.ADMIN_PASSWORD = 'ensa2024';
+// Environment variables — configuration via .env.local (aucun secret dans le code)
+console.log('Loading environment variables...');
+if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
+  console.error('\n❌ MONGODB_URI / MONGODB_DB manquants.');
+  console.error('   Créez un fichier .env.local avec vos identifiants, ex. :');
+  console.error('   MONGODB_URI=mongodb+srv://user:pass@host/db');
+  console.error('   MONGODB_DB=ensaoffline');
+  console.error('   ADMIN_USERNAME=admin');
+  console.error('   ADMIN_PASSWORD=<votre-mot-de-passe>');
+  process.exit(1);
+}
 
 // Debug: Log environment variables
 console.log('Environment variables loaded:');
@@ -402,7 +407,7 @@ async function main() {
     console.log('\n🎉 You can now:');
     console.log('   • Visit http://localhost:3000 to see the website');
     console.log('   • Visit http://localhost:3000/admin to manage products');
-    console.log('   • Login with: admin / ensa2024');
+    console.log(`   • Login with: ${process.env.ADMIN_USERNAME || 'admin'} / <votre ADMIN_PASSWORD>`);
 
   } catch (error) {
     console.error('\n❌ Error setting up database:', error);

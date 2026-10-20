@@ -11,7 +11,7 @@ This folder contains comprehensive documentation for the ENSA OFFLINE brutalist 
 
 ### Quick Reference
 - **API Endpoints**: `/api/products`, `/api/orders`, `/api/settings`
-- **Admin Login**: Username `admin`, Password `ensa2024`
+- **Admin Login**: Username `admin`, Password `<votre-ADMIN_PASSWORD>`
 - **Order Statuses**: pending → contacted → printed → delivering → delivered → finished
 - **Supported Cities**: Tetouan (free), Casablanca, Rabat, Marrakech, Fez, Agadir, etc.
 
@@ -127,7 +127,7 @@ MONGODB_DB="ensaoffline"
 - Check the main project README for setup issues
 
 ### Common Issues
-- **Login Problems**: Verify credentials (`admin` / `ensa2024`) and clear browser cache
+- **Login Problems**: Verify credentials (`admin` / `<votre-ADMIN_PASSWORD>`) and clear browser cache
 - **Tailwind CSS Errors**: Ensure `tailwind.config.ts` includes custom theme configuration
 - **GSAP Animation Issues**: Check element existence before animating with proper null checks
 - **MongoDB Connection**: Verify MongoDB URI and ensure service is running

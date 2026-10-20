@@ -10,7 +10,7 @@ The ENSA OFFLINE admin dashboard provides comprehensive management tools for you
 1. Navigate to `/admin/login`
 2. Enter credentials:
    - **Username**: `admin`
-   - **Password**: `ensa2024`
+   - **Password**: `<votre-ADMIN_PASSWORD>`
 3. Click "Login" to access the dashboard
 
 ### Session Management
@@ -321,7 +321,7 @@ The ENSA OFFLINE admin dashboard provides comprehensive management tools for you
 
 #### Login Problems
 - **Problem**: Cannot log into admin dashboard
-- **Solution**: Verify credentials (`admin` / `ensa2024`)
+- **Solution**: Verify credentials (`admin` / `<votre-ADMIN_PASSWORD>`)
 - **Fix**: Clear browser cache and cookies, try incognito mode
 
 #### Slow Loading

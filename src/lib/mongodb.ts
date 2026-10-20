@@ -5,13 +5,14 @@ declare global {
   var mongooseConn: { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null } | undefined;
 }
 
-// Get MongoDB URI with fallback
-let mongoUri = process.env.MONGODB_URI as string;
+// MongoDB URI — obligatoirement issu de l'environnement (.env.local)
+const mongoUri = process.env.MONGODB_URI as string;
 
-// Fallback if environment variable is not loaded properly
 if (!mongoUri) {
-  console.log('MONGODB_URI not found in environment, using fallback...');
-  mongoUri = 'mongodb+srv://abdellah:abdellah123@ensaoffline.k6ywb9v.mongodb.net/ensaoffline';
+  throw new Error(
+    'MONGODB_URI manquant : créez un fichier .env.local avec vos identifiants (voir .env.example). ' +
+    'Aucun identifiant n\'est codé en dur dans le code source.'
+  );
 }
 
 console.log('Using MongoDB URI:', mongoUri ? 'Set' : 'Not set');
