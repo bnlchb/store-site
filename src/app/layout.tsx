@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     description,
     images: [
       {
-        url: "/originalfit-og.png",
+        url: "/originalfit-og.jpj",
         width: 1200,
         height: 630,
         alt: "Originalfit — Sportswear sélectionné au Maroc",
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Originalfit — Sportswear sélectionné au Maroc",
     description,
-    images: ["/originalfit-og.png"],
+    images: ["/originalfit-og.jpj"],
   },
   robots: {
     index: true,

@@ -125,10 +125,10 @@ const sampleProducts = [
     price: 35,
     images: [
       {
-        original: "/images/products/offline-shirt-001/detail-2.png",
-        thumbnail: "/images/products/offline-shirt-001/detail-2.png",
-        medium: "/images/products/offline-shirt-001/detail-2.png",
-        large: "/images/products/offline-shirt-001/detail-2.png",
+        original: "/images/products/offline-shirt-001/detail-2.jpj",
+        thumbnail: "/images/products/offline-shirt-001/detail-2.jpj",
+        medium: "/images/products/offline-shirt-001/detail-2.jpj",
+        large: "/images/products/offline-shirt-001/detail-2.jpj",
       }
     ],
     sizes: ["S", "M", "L", "XL"],
