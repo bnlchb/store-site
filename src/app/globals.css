@@ -6,13 +6,14 @@
 @import 'flag-icons/css/flag-icons.min.css';
 
 :root {
-  --background: #ffffff;
-  --foreground: #111111;
+  --background: #f2efe6;
+  --foreground: #111110;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
+  overflow-x: hidden;
 }
 
 @layer base {
@@ -20,16 +21,71 @@ body {
     height: 100%;
   }
   * {
-    @apply border-black selection:bg-[#8BC34A] selection:text-black;
+    @apply border-black selection:bg-[#D8FF3E] selection:text-[#111110];
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-display tracking-tight uppercase;
   }
   a {
-    @apply underline underline-offset-4 decoration-2 hover:decoration-[#8BC34A];
+    @apply underline underline-offset-4 decoration-2 hover:decoration-[#D8FF3E];
   }
   html {
     scroll-behavior: smooth;
+  }
+}
+
+/* Originalfit storefront: editorial sentence case, no default link underline */
+.of-site h1,
+.of-site h2,
+.of-site h3,
+.of-site h4,
+.of-site h5,
+.of-site h6 {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.of-site a {
+  text-decoration: none;
+}
+
+.of-grid {
+  background-image:
+    linear-gradient(to right, rgba(17, 17, 16, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(17, 17, 16, 0.055) 1px, transparent 1px);
+  background-size: 88px 88px;
+}
+
+.text-outline-light {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #f7f4ec;
+}
+
+.text-outline-ink {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #111110;
+}
+
+.marquee-track {
+  animation: of-marquee 34s linear infinite;
+}
+
+@keyframes of-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .animate-spin-slow {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }
 
@@ -55,7 +111,7 @@ body {
   .animate-slide-in {
     animation: slideIn 0.3s ease-out forwards;
   }
-  
+
   @keyframes slideIn {
     from {
       transform: translateX(100%);
@@ -96,12 +152,12 @@ body {
   .anim-pop { animation: pop 180ms ease-out; }
   .anim-skew-in { animation: skew-in 400ms ease-out; }
   .anim-fade-up { animation: fade-up 500ms ease-out; }
-  
+
   /* Brutalist Ripple Effect Animations */
   .animate-cell-ripple {
     animation: cell-ripple var(--duration, 800ms) ease-out var(--delay, 0ms) forwards;
   }
-  
+
   @keyframes cell-ripple {
     0% {
       transform: scale(1);

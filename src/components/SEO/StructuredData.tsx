@@ -1,113 +1,84 @@
+import { BRAND, SITE_URL } from "@/lib/brand";
+
 export function StructuredData() {
   const schemaData = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Organization",
-        "@id": "https://www.ensa-offline.store/#organization",
-        name: "ENSA OFFLINE",
-        url: "https://www.ensa-offline.store",
-        logo: "https://www.ensa-offline.store/ensa-offline.png?v=2",
-        description: "Official ENSA Tetouan merchandise store - ENSA Maroc. Premium streetwear, custom apparel, and authentic ENSA OFFLINE collection.",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Tetouan",
-          addressCountry: "MA",
-          addressRegion: "Tanger-Tetouan-Al Hoceima"
+        "@id": `${SITE_URL}/#organization`,
+        name: BRAND.name,
+        alternateName: BRAND.wordmark,
+        url: SITE_URL,
+        logo: `${SITE_URL}/originalfit-mark.svg`,
+        description:
+          "Sélection sportswear au Maroc. Originalfit vérifie le modèle, le prix et le délai avant chaque commande.",
+        areaServed: {
+          "@type": "Country",
+          name: "Morocco",
         },
         contactPoint: {
           "@type": "ContactPoint",
           contactType: "Customer Service",
           areaServed: "MA",
-          availableLanguage: ["en", "fr", "ar"]
+          availableLanguage: ["fr", "ar", "en"],
         },
-        sameAs: [
-          "https://www.instagram.com/ensaoffline",
-          "https://www.facebook.com/ensaoffline",
-          "https://twitter.com/ensaoffline"
-        ]
+        sameAs: [BRAND.instagramUrl],
       },
       {
         "@type": "WebSite",
-        "@id": "https://www.ensa-offline.store/#website",
-        url: "https://www.ensa-offline.store",
-        name: "ENSA OFFLINE",
-        description: "Official ENSA Tetouan merchandise store - ENSA Tetouan, ENSA Maroc. Shop premium streetwear, hoodies, t-shirts, and custom apparel for ENSA students and alumni.",
-        inLanguage: "en-US",
-        potentialAction: {
-          "@type": "SearchAction",
-          target: {
-            "@type": "EntryPoint",
-            urlTemplate: "https://www.ensa-offline.store/products?search={search_term_string}"
-          },
-          "query-input": "required name=search_term_string"
-        }
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: BRAND.wordmark,
+        description:
+          "Sportswear sélectionné au Maroc. Choisis une inspiration, on vérifie le modèle pour toi.",
+        inLanguage: "fr-MA",
+        publisher: {
+          "@id": `${SITE_URL}/#organization`,
+        },
       },
       {
         "@type": "WebPage",
-        "@id": "https://www.ensa-offline.store/#webpage",
-        url: "https://www.ensa-offline.store",
-        name: "ENSA OFFLINE Store - Official ENSA Tetouan Merchandise",
-        description: "Official ENSA Tetouan merchandise store - ENSA Maroc. Shop premium streetwear, hoodies, t-shirts, and custom apparel designed for ENSA students and alumni in Tetouan, Morocco.",
+        "@id": `${SITE_URL}/#webpage`,
+        url: SITE_URL,
+        name: "Originalfit — Sportswear sélectionné au Maroc",
+        description:
+          "Originalfit, une sélection sportswear pensée pour accompagner tes journées. Prix et disponibilité confirmés sur demande.",
         isPartOf: {
-          "@id": "https://www.ensa-offline.store/#website"
+          "@id": `${SITE_URL}/#website`,
         },
         about: {
-          "@id": "https://www.ensa-offline.store/#organization"
+          "@id": `${SITE_URL}/#organization`,
         },
         primaryImageOfPage: {
           "@type": "ImageObject",
-          url: "https://www.ensa-offline.store/ensa-offline.png?v=2",
+          url: `${SITE_URL}/originalfit-og.png`,
           width: 1200,
-          height: 630
-        }
+          height: 630,
+        },
+        inLanguage: "fr-MA",
       },
       {
         "@type": "Store",
-        "@id": "https://www.ensa-offline.store/#store",
-        name: "ENSA OFFLINE Store",
-        description: "Official ENSA Tetouan merchandise store - ENSA Tetouan, ENSA Maroc, ENSA Morocco",
-        url: "https://www.ensa-offline.store",
-        image: "https://www.ensa-offline.store/ensa-offline.png?v=2",
+        "@id": `${SITE_URL}/#store`,
+        name: "Originalfit",
+        description:
+          "Sélection sportswear au Maroc — prix et disponibilité confirmés sur demande.",
+        url: SITE_URL,
+        image: `${SITE_URL}/originalfit-og.png`,
         address: {
           "@type": "PostalAddress",
-          streetAddress: "Tetouan",
-          addressLocality: "Tetouan",
-          addressRegion: "Tanger-Tetouan-Al Hoceima",
-          postalCode: "93000",
-          addressCountry: "MA"
+          addressCountry: "MA",
+          addressRegion: "Maroc",
         },
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: "35.5742",
-          longitude: "-5.3728"
+        areaServed: {
+          "@type": "Country",
+          name: "Morocco",
         },
-        openingHoursSpecification: {
-          "@type": "OpeningHoursSpecification",
-          dayOfWeek: [
-            "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
-          ],
-          opens: "09:00",
-          closes: "18:00"
-        },
-        priceRange: "$$",
-        currenciesAccepted: "MAD, USD"
+        priceRange: "Sur demande",
+        currenciesAccepted: "MAD",
       },
-      {
-        "@type": "CollegeOrUniversity",
-        "@id": "https://www.ensa-offline.store/#university",
-        name: "ENSA Tetouan",
-        alternateName: ["ENSA Maroc", "ENSA Morocco", "ENSA"],
-        description: "École Nationale des Sciences Appliquées de Tétouan",
-        url: "https://www.ensa-offline.store",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Tetouan",
-          addressRegion: "Tanger-Tetouan-Al Hoceima",
-          addressCountry: "MA"
-        }
-      }
-    ]
+    ],
   };
 
   return (
@@ -117,4 +88,3 @@ export function StructuredData() {
     />
   );
 }
-
