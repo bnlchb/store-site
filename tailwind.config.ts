@@ -14,7 +14,7 @@ const config: Config = {
         bone: "#F2EFE6",
         paper: "#FBF9F4",
         ink: "#111110",
-        volt: "#D8FF3E",
+        volt: "#C24657",
         sand: "#E7E1D5",
         muted: "#77736A",
         line: "#D8D2C4",

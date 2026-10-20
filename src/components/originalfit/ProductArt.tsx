@@ -8,7 +8,7 @@ interface ProductArtProps {
 
 const ink = "#111110";
 const paper = "#F7F4EC";
-const volt = "#D8FF3E";
+const volt = "#C24657";
 
 function Frame({
   children,
