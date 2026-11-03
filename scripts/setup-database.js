@@ -9,8 +9,12 @@
 
 const mongoose = require('mongoose');
 const path = require('path');
+const dotenv = require('dotenv');
 
-// Environment variables — configuration via .env.local (aucun secret dans le code)
+// Environment variables — loaded from .env.local (local dev) and .env (production/deploy).
+// Precedence mirrors Next.js: .env.local overrides .env. Aucun secret dans le code.
+dotenv.config({ path: path.resolve(__dirname, '..', '.env.local') });
+dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 console.log('Loading environment variables...');
 if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
   console.error('\n❌ MONGODB_URI / MONGODB_DB manquants.');
@@ -22,18 +26,11 @@ if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
   process.exit(1);
 }
 
-// Debug: Log environment variables
+// Debug: Log environment variables (valeurs masquées — n'affiche jamais de secret)
 console.log('Environment variables loaded:');
 console.log('MONGODB_URI:', process.env.MONGODB_URI ? 'Set' : 'Not set');
 console.log('MONGODB_DB:', process.env.MONGODB_DB || 'Not set');
-
-// Additional debugging
-console.log('All env vars starting with MONGODB:');
-Object.keys(process.env).forEach(key => {
-  if (key.startsWith('MONGODB')) {
-    console.log(`${key}: ${process.env[key]}`);
-  }
-});
+console.log('MONGODB_* vars:', Object.keys(process.env).filter(k => k.startsWith('MONGODB')).join(', ') || 'none');
 
 // Product Schema
 const ProductSchema = new mongoose.Schema({
