@@ -7,8 +7,8 @@ export const BRAND = {
   tagline: "Le style sport, à ton rythme.",
   description:
     "Sportswear sélectionné au Maroc. Choisis une inspiration, on vérifie le modèle, le prix et le délai avant toute commande.",
-  instagramUrl: "https://www.instagram.com/originalfit.ma/",
-  instagramDmUrl: "https://ig.me/m/originalfit.ma",
+  instagramUrl: "https://www.instagram.com/the_original_fit/",
+  instagramDmUrl: "https://ig.me/m/the_original_fit",
   location: "Maroc",
   year: 2026,
 } as const;

@@ -78,7 +78,7 @@ insert into public.settings (
   true,
   false,
   '{"whatsappNumber":"+212 6XX XXX XXX","email":"contact@originalfit.ma","address":"Maroc"}'::jsonb,
-  '{"instagram":"@originalfit.ma","facebook":"Originalfit","twitter":"@originalfit_ma"}'::jsonb
+  '{"instagram":"@the_original_fit","facebook":"Originalfit","twitter":"@originalfit_ma"}'::jsonb
 ) on conflict (id) do nothing;
 
 -- ------------------------------------------------------------

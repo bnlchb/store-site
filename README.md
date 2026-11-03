@@ -25,7 +25,7 @@ Le site fonctionne comme un **vitrine de sélection**, pas une boutique en ligne
 2. **Composez « Ma sélection »** — choisissez une taille, ajoutez, revisitée à tout moment depuis le tiroir de sélection.
 3. **Envoyez via Instagram DM** — la sélection est copiée dans le presse-papiers et Instagram s'ouvre avec le message prêt à envoyer.
 
-Les prix sont révélés sur demande : contactez [@originalfit.ma](https://www.instagram.com/originalfit.ma/) en DM.
+Les prix sont révélés sur demande : contactez [@the_original_fit](https://www.instagram.com/the_original_fit/) en DM.
 
 ---
 

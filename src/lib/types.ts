@@ -168,7 +168,7 @@ export const DEFAULT_SETTINGS: SettingsDoc = {
     address: 'Maroc',
   },
   socialMedia: {
-    instagram: '@originalfit.ma',
+    instagram: '@the_original_fit',
     facebook: 'Originalfit',
     twitter: '@originalfit_ma',
   },
