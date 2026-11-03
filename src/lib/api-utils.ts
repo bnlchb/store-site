@@ -1,8 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/mongodb';
-import { Product } from '@/models/Product';
-import { Order } from '@/models/Order';
-import { Settings } from '@/models/Settings';
 
 // Utility function for API responses
 export function createResponse(data: any, status: number = 200) {

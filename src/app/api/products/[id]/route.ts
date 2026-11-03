@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import { connectToDatabase } from '@/lib/mongodb';
-import { Product } from '@/models/Product';
+import { getSupabase } from '@/lib/supabase';
+import { mapProductRow, parseId, productInputToRow } from '@/lib/types';
 import { createResponse, createErrorResponse, requireAuth, validateProductData } from '@/lib/api-utils';
 
 // Force dynamic rendering
@@ -12,15 +12,26 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    await connectToDatabase();
-    
-    const product = await Product.findById(params.id).select('-__v');
-    
-    if (!product) {
+    const supabase = getSupabase();
+
+    const id = parseId(params.id);
+    if (!id) {
       return createErrorResponse('Product not found', 404, 'Not Found');
     }
-    
-    return createResponse(product);
+
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!data) {
+      return createErrorResponse('Product not found', 404, 'Not Found');
+    }
+
+    return createResponse(mapProductRow(data));
   } catch (error) {
     console.error('Error fetching product:', error);
     return createErrorResponse('Failed to fetch product', 500, 'Internal Server Error');
@@ -36,11 +47,16 @@ export async function PUT(
     // Check authentication
     const authError = requireAuth(request);
     if (authError) return authError;
-    
-    await connectToDatabase();
-    
+
+    const supabase = getSupabase();
+
+    const id = parseId(params.id);
+    if (!id) {
+      return createErrorResponse('Product not found', 404, 'Not Found');
+    }
+
     const body = await request.json();
-    
+
     // Validate input data
     const validationErrors = validateProductData(body);
     if (validationErrors.length > 0) {
@@ -48,50 +64,57 @@ export async function PUT(
         details: validationErrors
       });
     }
-    
-    const product = await Product.findById(params.id);
-    
-    if (!product) {
+
+    const { data, error } = await supabase
+      .from('products')
+      .update(productInputToRow(body, true))
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    if (!data) {
       return createErrorResponse('Product not found', 404, 'Not Found');
     }
-    
-    // Update product fields
-    product.name = body.name.trim();
-    product.description = body.description?.trim();
-    product.price = body.price;
-    product.images = body.images || [];
-    product.sizes = body.sizes;
-    product.category = body.category?.trim();
-    product.isCustomizable = body.isCustomizable || false;
-    product.customPrice = body.customPrice || 0;
-    product.isActive = body.isActive !== undefined ? body.isActive : product.isActive;
-    
-    const updatedProduct = await product.save();
-    
-    return createResponse(updatedProduct);
+
+    return createResponse(mapProductRow(data));
   } catch (error) {
     console.error('Error updating product:', error);
     return createErrorResponse('Failed to update product', 500, 'Internal Server Error');
   }
 }
 
-// DELETE /api/products/[id] - Delete product
+// DELETE /api/products/[id] - Delete product (admin only)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    
-    await connectToDatabase();
-    
-    const product = await Product.findById(params.id);
-    
-    if (!product) {
+    // Check authentication
+    const authError = requireAuth(request);
+    if (authError) return authError;
+
+    const supabase = getSupabase();
+
+    const id = parseId(params.id);
+    if (!id) {
       return createErrorResponse('Product not found', 404, 'Not Found');
     }
-    
-    await Product.findByIdAndDelete(params.id);
-    
+
+    const { data, error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', id)
+      .select('id')
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!data) {
+      return createErrorResponse('Product not found', 404, 'Not Found');
+    }
+
     return createResponse({ message: 'Product deleted successfully' });
   } catch (error) {
     console.error('Error deleting product:', error);

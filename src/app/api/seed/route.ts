@@ -5,9 +5,13 @@ import { requireAuth, createResponse, createErrorResponse } from '@/lib/api-util
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
 
-// POST /api/seed - Seed database with sample data
+// POST /api/seed - Seed database with sample data (admin only)
 export async function POST(request: NextRequest) {
   try {
+
+    // Check authentication (seeding wipes existing data)
+    const authError = requireAuth(request);
+    if (authError) return authError;
 
     const { force } = await request.json().catch(() => ({}));
     

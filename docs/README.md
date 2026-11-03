@@ -65,12 +65,14 @@ This folder contains comprehensive documentation for the ENSA OFFLINE brutalist 
 
 ### Environment Variables
 ```env
-MONGODB_URI="mongodb://localhost:27017/ensaoffline"
-MONGODB_DB="ensaoffline"
+SUPABASE_URL="https://your-project-ref.supabase.co"
+SUPABASE_ANON_KEY="your-anon-public-key"
+SUPABASE_SERVICE_ROLE_KEY="your-service-role-key"
 ```
 
 ### Production Considerations
-- Set up MongoDB Atlas for production database
+- Run `supabase/schema.sql` once in Supabase > SQL Editor to create the tables
+- Use the service_role key server-side only (admin writes bypass RLS)
 - Configure environment variables securely
 - Enable HTTPS for production deployment
 - Set up monitoring and logging

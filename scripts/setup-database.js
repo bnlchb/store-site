@@ -1,13 +1,19 @@
 #!/usr/bin/env node
 
 /**
- * Database Setup Script for ENSA OFFLINE
- * 
- * This script helps set up the database with initial data
- * Run with: npm run setup-db
+ * Database Setup Script for Originalfit / ENSA OFFLINE STORE (Supabase)
+ *
+ * Seeds / resets the Supabase PostgreSQL database with sample data.
+ * Run with: npm run setup-db | npm run seed-db | npm run reset-db
+ *
+ * Required environment (.env or .env.local at the project root):
+ *   SUPABASE_URL              — Dashboard > Project Settings > API
+ *   SUPABASE_SERVICE_ROLE_KEY — required to delete/insert (bypasses RLS)
+ *   SUPABASE_ANON_KEY         — fallback (read-only via RLS)
+ *
+ * SQL schema to run once in Supabase > SQL Editor: supabase/schema.sql
  */
 
-const mongoose = require('mongoose');
 const path = require('path');
 const dotenv = require('dotenv');
 
@@ -15,399 +21,189 @@ const dotenv = require('dotenv');
 // Precedence mirrors Next.js: .env.local overrides .env. Aucun secret dans le code.
 dotenv.config({ path: path.resolve(__dirname, '..', '.env.local') });
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
-console.log('Loading environment variables...');
-if (!process.env.MONGODB_URI || !process.env.MONGODB_DB) {
-  console.error('\n❌ MONGODB_URI / MONGODB_DB manquants.');
-  console.error('   Créez un fichier .env.local avec vos identifiants, ex. :');
-  console.error('   MONGODB_URI=mongodb+srv://user:pass@host/db');
-  console.error('   MONGODB_DB=ensaoffline');
-  console.error('   ADMIN_USERNAME=admin');
-  console.error('   ADMIN_PASSWORD=<votre-mot-de-passe>');
+
+const { createClient } = require('@supabase/supabase-js');
+const sampleData = require('../src/lib/sample-data.json');
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const KEY = SERVICE_KEY || ANON_KEY;
+
+if (!SUPABASE_URL || !KEY) {
+  console.error('\n❌ SUPABASE_URL / SUPABASE_ANON_KEY manquants.');
+  console.error('   Créez un fichier .env à la racine du projet avec :');
+  console.error('   SUPABASE_URL=https://VOTRE-PROJET.supabase.co');
+  console.error('   SUPABASE_ANON_KEY=votre-anon-key');
+  console.error('   SUPABASE_SERVICE_ROLE_KEY=votre-service-role-key');
+  console.error('   (URL et clés : Supabase Dashboard > Project Settings > API)');
+  console.error('   Créez d\'abord le schéma : Supabase > SQL Editor > supabase/schema.sql');
   process.exit(1);
 }
 
-// Debug: Log environment variables (valeurs masquées — n'affiche jamais de secret)
-console.log('Environment variables loaded:');
-console.log('MONGODB_URI:', process.env.MONGODB_URI ? 'Set' : 'Not set');
-console.log('MONGODB_DB:', process.env.MONGODB_DB || 'Not set');
-console.log('MONGODB_* vars:', Object.keys(process.env).filter(k => k.startsWith('MONGODB')).join(', ') || 'none');
+if (!SERVICE_KEY) {
+  console.error('\n⚠️  SUPABASE_SERVICE_ROLE_KEY absente : seul le mode lecture/verification fonctionnera,');
+  console.error('    le seed/reset (écritures via la clé anon) sera rejeté par RLS.');
+}
 
-// Product Schema
-const ProductSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true, maxlength: 150 },
-  description: { type: String, trim: true },
-  price: { type: Number, required: true, min: 0 },
-  images: [{
-    original: { type: String, required: true },
-    thumbnail: { type: String, required: true },
-    medium: { type: String, required: true },
-    large: { type: String, required: true },
-  }],
-  sizes: { type: [String], default: [] },
-  category: { type: String, trim: true },
-  isCustomizable: { type: Boolean, default: false },
-  customPrice: { type: Number, min: 0 },
-  isActive: { type: Boolean, default: true, index: true },
-  stock: { type: Number, default: 0, min: 0 },
-  tags: { type: [String], default: [] },
-}, { timestamps: true });
+console.log('Loading environment variables...');
+console.log('SUPABASE_URL:', SUPABASE_URL ? 'Set' : 'Not set');
+console.log('Auth mode:', SERVICE_KEY ? 'service_role' : 'anon');
 
-// Settings Schema
-const SettingsSchema = new mongoose.Schema({
-  productPrices: { type: Map, of: Number, default: {} },
-  customTextPrice: { type: Number, required: true, min: 0, default: 0 },
-  shippingFees: { type: Map, of: Number, default: {} },
-  discountCodes: [{
-    code: { type: String, required: true, uppercase: true },
-    type: { type: String, enum: ['percentage', 'fixed'], required: true },
-    value: { type: Number, required: true, min: 0 },
-    isActive: { type: Boolean, default: true },
-  }],
-  defaultCurrency: { type: String, enum: ['MAD', 'USD'], default: 'MAD' },
-  exchangeRate: { type: Number, default: 10, min: 0.1 },
-  isOrderingEnabled: { type: Boolean, default: true },
-  maintenanceMode: { type: Boolean, default: false },
-  contactInfo: {
-    whatsappNumber: { type: String, trim: true },
-    email: { type: String, trim: true },
-    address: { type: String, trim: true },
-  },
-  socialMedia: {
-    instagram: { type: String, trim: true },
-    facebook: { type: String, trim: true },
-    twitter: { type: String, trim: true },
-  },
-}, { timestamps: true });
+const supabase = createClient(SUPABASE_URL, KEY, {
+  auth: { autoRefreshToken: false, persistSession: false },
+});
 
-// Sample product data
-const sampleProducts = [
-  {
-    name: "ENSA OFFLINE Hoodie",
-    description: "Premium quality hoodie with brutalist design. Made from 100% cotton blend for maximum comfort and durability.",
-    price: 89,
-    images: [
-      {
-        original: "/images/products/offline-shirt-001/main.jpg",
-        thumbnail: "/images/products/offline-shirt-001/main.jpg",
-        medium: "/images/products/offline-shirt-001/main.jpg",
-        large: "/images/products/offline-shirt-001/main.jpg",
-      }
-    ],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    category: "Hoodies",
-    isCustomizable: true,
-    customPrice: 15,
-    isActive: true,
-    stock: 50,
-    tags: ["brutalist", "streetwear", "premium", "cotton"],
-  },
-  {
-    name: "ENSA OFFLINE T-Shirt",
-    description: "Classic brutalist t-shirt with bold graphics. Perfect for everyday wear with a statement.",
-    price: 45,
-    images: [
-      {
-        original: "/images/products/offline-shirt-001/detail-1.jpg",
-        thumbnail: "/images/products/offline-shirt-001/detail-1.jpg",
-        medium: "/images/products/offline-shirt-001/detail-1.jpg",
-        large: "/images/products/offline-shirt-001/detail-1.jpg",
-      }
-    ],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    category: "T-Shirts",
-    isCustomizable: true,
-    customPrice: 10,
-    isActive: true,
-    stock: 100,
-    tags: ["brutalist", "graphic", "cotton", "unisex"],
-  },
-  {
-    name: "ENSA OFFLINE Tank Top",
-    description: "Sleek tank top with minimalist brutalist design. Ideal for summer and layering.",
-    price: 35,
-    images: [
-      {
-        original: "/images/products/offline-shirt-001/detail-2.jpj",
-        thumbnail: "/images/products/offline-shirt-001/detail-2.jpj",
-        medium: "/images/products/offline-shirt-001/detail-2.jpj",
-        large: "/images/products/offline-shirt-001/detail-2.jpj",
-      }
-    ],
-    sizes: ["S", "M", "L", "XL"],
-    category: "Tank Tops",
-    isCustomizable: true,
-    customPrice: 8,
-    isActive: true,
-    stock: 75,
-    tags: ["brutalist", "tank", "summer", "minimalist"],
-  },
-  {
-    name: "ENSA OFFLINE Long Sleeve",
-    description: "Long sleeve shirt with geometric brutalist patterns. Perfect for layering and cooler weather.",
-    price: 55,
-    images: [
-      {
-        original: "/images/products/offline-shirt-001/detail-3.jpg",
-        thumbnail: "/images/products/offline-shirt-001/detail-3.jpg",
-        medium: "/images/products/offline-shirt-001/detail-3.jpg",
-        large: "/images/products/offline-shirt-001/detail-3.jpg",
-      }
-    ],
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    category: "Long Sleeves",
-    isCustomizable: true,
-    customPrice: 12,
-    isActive: true,
-    stock: 60,
-    tags: ["brutalist", "long-sleeve", "geometric", "layering"],
-  },
-  {
-    name: "ENSA OFFLINE Cap",
-    description: "Brutalist baseball cap with bold logo. Made from premium materials for durability.",
-    price: 25,
-    images: [
-      {
-        original: "/images/products/offline-shirt-001/detail-4.jpg",
-        thumbnail: "/images/products/offline-shirt-001/detail-4.jpg",
-        medium: "/images/products/offline-shirt-001/detail-4.jpg",
-        large: "/images/products/offline-shirt-001/detail-4.jpg",
-      }
-    ],
-    sizes: ["One Size"],
-    category: "Accessories",
-    isCustomizable: false,
-    customPrice: 0,
-    isActive: true,
-    stock: 30,
-    tags: ["brutalist", "cap", "accessory", "logo"],
-  },
-  {
-    name: "ENSA OFFLINE Beanie",
-    description: "Warm beanie with brutalist design. Perfect for cold weather and street style.",
-    price: 20,
-    images: [
-      {
-        original: "/images/products/offline-shirt-001/detail-5.jpg",
-        thumbnail: "/images/products/offline-shirt-001/detail-5.jpg",
-        medium: "/images/products/offline-shirt-001/detail-5.jpg",
-        large: "/images/products/offline-shirt-001/detail-5.jpg",
-      }
-    ],
-    sizes: ["One Size"],
-    category: "Accessories",
-    isCustomizable: false,
-    customPrice: 0,
-    isActive: true,
-    stock: 40,
-    tags: ["brutalist", "beanie", "winter", "streetwear"],
-  },
-];
+function productToRow(p) {
+  return {
+    name: p.name,
+    description: p.description ?? null,
+    price: p.price,
+    images: p.images,
+    sizes: p.sizes,
+    category: p.category ?? null,
+    is_customizable: p.isCustomizable || false,
+    custom_price: p.customPrice || 0,
+    is_active: p.isActive !== undefined ? p.isActive : true,
+    stock: p.stock || 0,
+    tags: p.tags || [],
+  };
+}
 
-// Sample settings data
-const sampleSettings = {
-  productPrices: new Map([
-    ["ENSA OFFLINE Hoodie", 89],
-    ["ENSA OFFLINE T-Shirt", 45],
-    ["ENSA OFFLINE Tank Top", 35],
-    ["ENSA OFFLINE Long Sleeve", 55],
-    ["ENSA OFFLINE Cap", 25],
-    ["ENSA OFFLINE Beanie", 20],
-  ]),
-  customTextPrice: 15,
-  shippingFees: new Map([
-    ["Tetouan", 0],
-    ["Casablanca", 25],
-    ["Rabat", 20],
-    ["Marrakech", 30],
-    ["Fez", 25],
-    ["Agadir", 35],
-    ["Tangier", 15],
-    ["Meknes", 25],
-    ["Oujda", 30],
-    ["Kenitra", 20],
-    ["Safi", 30],
-    ["Mohammedia", 25],
-    ["Khouribga", 25],
-    ["Beni Mellal", 30],
-    ["El Jadida", 30],
-    ["Taza", 25],
-    ["Nador", 30],
-    ["Settat", 25],
-    ["Larache", 20],
-    ["Ksar El Kebir", 20],
-  ]),
-  discountCodes: [
-    {
-      code: "ENSA10",
-      type: "percentage",
-      value: 10,
-      isActive: true,
-    },
-    {
-      code: "OFFLINE5",
-      type: "fixed",
-      value: 5,
-      isActive: true,
-    },
-    {
-      code: "WELCOME15",
-      type: "percentage",
-      value: 15,
-      isActive: true,
-    },
-  ],
-  isOrderingEnabled: true,
-  maintenanceMode: false,
-  contactInfo: {
-    whatsappNumber: "+212 6XX XXX XXX",
-    email: "contact@ensaoffline.com",
-    address: "Tetouan, Morocco",
-  },
-  socialMedia: {
-    instagram: "@ensaoffline",
-    facebook: "ENSA OFFLINE",
-    twitter: "@ensaoffline",
-  },
-};
+function settingsToRow(s) {
+  return {
+    id: 1,
+    product_prices: s.productPrices,
+    custom_text_price: s.customTextPrice,
+    shipping_fees: s.shippingFees,
+    discount_codes: s.discountCodes,
+    default_currency: s.defaultCurrency || 'MAD',
+    exchange_rate: s.exchangeRate || 10,
+    is_ordering_enabled: s.isOrderingEnabled !== undefined ? s.isOrderingEnabled : true,
+    maintenance_mode: s.maintenanceMode || false,
+    contact_info: s.contactInfo,
+    social_media: s.socialMedia,
+  };
+}
 
-// Database seeder function
+// ---------- stats / helpers ----------
+
+async function getStats() {
+  const { count: products } = await supabase.from('products').select('*', { count: 'exact', head: true });
+  const { count: activeProducts } = await supabase
+    .from('products')
+    .select('*', { count: 'exact', head: true })
+    .eq('is_active', true);
+  const { count: orders } = await supabase.from('orders').select('*', { count: 'exact', head: true });
+  const { count: communityTexts } = await supabase.from('community_texts').select('*', { count: 'exact', head: true });
+  const { data: settingsRow } = await supabase.from('settings').select('id').eq('id', 1).maybeSingle();
+  return {
+    products: products ?? 0,
+    activeProducts: activeProducts ?? 0,
+    orders: orders ?? 0,
+    communityTexts: communityTexts ?? 0,
+    settings: settingsRow ? 1 : 0,
+  };
+}
+
+async function resetDatabase() {
+  console.log('🗑️ Deleting all rows...');
+  const errors = [];
+  const res1 = await supabase.from('community_texts').delete().gt('id', 0);
+  if (res1.error) errors.push('community_texts: ' + res1.error.message);
+  const res2 = await supabase.from('products').delete().gt('id', 0);
+  if (res2.error) errors.push('products: ' + res2.error.message);
+  const res3 = await supabase.from('orders').delete().gt('id', 0);
+  if (res3.error) errors.push('orders: ' + res3.error.message);
+  const res4 = await supabase.from('settings').delete().gt('id', 0);
+  if (res4.error) errors.push('settings: ' + res4.error.message);
+  if (errors.length) {
+    console.error('\n❌ Reset partiel — erreurs :');
+    errors.forEach((e) => console.error('   -', e));
+    process.exit(1);
+  }
+  console.log('✅ Reset complete');
+}
+
 async function seedDatabase() {
-  try {
-    console.log('🌱 Starting database seeding...');
-    
-    // Connect to database
-    const mongoUri = process.env.MONGODB_URI;
-    if (!mongoUri) {
-      throw new Error('MONGODB_URI is not set in environment variables');
-    }
-    
-    await mongoose.connect(mongoUri, {
-      dbName: process.env.MONGODB_DB || 'ensaoffline',
-    });
-    console.log('✅ Connected to database');
+  console.log('🌱 Seeding database with sample data...');
 
-    // Clear existing data
-    await mongoose.connection.db.collection('products').deleteMany({});
-    await mongoose.connection.db.collection('settings').deleteMany({});
-    console.log('🗑️ Cleared existing data');
+  const { error: productsError } = await supabase.from('products').insert(sampleData.products.map(productToRow));
+  if (productsError) throw productsError;
+  console.log(`✅ Inserted ${sampleData.products.length} products`);
 
-    // Create models
-    const Product = mongoose.model('Product', ProductSchema);
-    const Settings = mongoose.model('Settings', SettingsSchema);
+  const { error: settingsError } = await supabase.from('settings').upsert(settingsToRow(sampleData.settings));
+  if (settingsError) throw settingsError;
+  console.log('✅ Inserted settings');
 
-    // Insert sample products
-    const products = await Product.insertMany(sampleProducts);
-    console.log(`✅ Inserted ${products.length} products`);
+  const { error: textsError } = await supabase.from('community_texts').insert(
+    sampleData.communityTexts.map((t) => ({
+      text: t.text,
+      category: t.category,
+      is_approved: t.isApproved,
+      submitted_by: t.submittedBy,
+      usage_count: t.usageCount,
+    }))
+  );
+  if (textsError) throw textsError;
+  console.log(`✅ Inserted ${sampleData.communityTexts.length} community texts`);
 
-    // Insert sample settings
-    const settings = await Settings.create(sampleSettings);
-    console.log('✅ Inserted settings');
-
-    console.log('🎉 Database seeding completed successfully!');
-    
-    return {
-      products: products.length,
-      settings: 1,
-    };
-  } catch (error) {
-    console.error('❌ Error seeding database:', error);
-    throw error;
-  } finally {
-    await mongoose.disconnect();
-  }
+  console.log('🎉 Seeding complete!');
 }
 
-// Function to check if database is empty
-async function isDatabaseEmpty() {
-  try {
-    const mongoUri = process.env.MONGODB_URI;
-    if (!mongoUri) {
-      throw new Error('MONGODB_URI is not set in environment variables');
-    }
-    
-    await mongoose.connect(mongoUri, {
-      dbName: process.env.MONGODB_DB || 'ensaoffline',
-    });
-    
-    const productCount = await mongoose.connection.db.collection('products').countDocuments();
-    const settingsCount = await mongoose.connection.db.collection('settings').countDocuments();
-    
-    return productCount === 0 && settingsCount === 0;
-  } catch (error) {
-    console.error('Error checking database:', error);
-    return false;
-  } finally {
-    await mongoose.disconnect();
-  }
-}
-
-// Function to get database stats
-async function getDatabaseStats() {
-  try {
-    const mongoUri = process.env.MONGODB_URI;
-    if (!mongoUri) {
-      throw new Error('MONGODB_URI is not set in environment variables');
-    }
-    
-    await mongoose.connect(mongoUri, {
-      dbName: process.env.MONGODB_DB || 'ensaoffline',
-    });
-    
-    const productCount = await mongoose.connection.db.collection('products').countDocuments();
-    const activeProductCount = await mongoose.connection.db.collection('products').countDocuments({ isActive: true });
-    const settingsCount = await mongoose.connection.db.collection('settings').countDocuments();
-    
-    return {
-      products: productCount,
-      activeProducts: activeProductCount,
-      settings: settingsCount,
-    };
-  } catch (error) {
-    console.error('Error getting database stats:', error);
-    return null;
-  } finally {
-    await mongoose.disconnect();
-  }
-}
+// ---------- main ----------
 
 async function main() {
-  console.log('🚀 ENSA OFFLINE Database Setup');
-  console.log('================================\n');
+  console.log('🚀 Originalfit Database Setup (Supabase)');
+  console.log('=========================================\n');
+
+  let stats;
+  try {
+    stats = await getStats();
+  } catch (error) {
+    console.error('\n❌ Impossible de joindre Supabase :', error.message);
+    console.error('   Vérifiez SUPABASE_URL / clés dans le fichier .env');
+    process.exit(1);
+  }
+
+  console.log('📊 Current stats:');
+  console.log(`   Products: ${stats.products} (active: ${stats.activeProducts})`);
+  console.log(`   Orders: ${stats.orders}`);
+  console.log(`   Community texts: ${stats.communityTexts}`);
+  console.log(`   Settings row: ${stats.settings ? 'yes' : 'no'}`);
+
+  const args = process.argv.slice(2);
+
+  if (args.includes('--reset')) {
+    await resetDatabase();
+    console.log('\n✅ Database reset completed.');
+    return;
+  }
+
+  const force = args.includes('--force');
+
+  if (!force && (stats.products > 0 || stats.communityTexts > 0)) {
+    console.log('\n⚠️  Database is not empty!');
+    console.log('   To seed with sample data, use: npm run seed-db -- --force');
+    console.log('   To reset database, use: npm run reset-db');
+    return;
+  }
+
+  if (force) {
+    await resetDatabase();
+  }
 
   try {
-    // Check if database is empty
-    console.log('📊 Checking database status...');
-    const isEmpty = await isDatabaseEmpty();
-    const stats = await getDatabaseStats();
-
-    if (stats) {
-      console.log(`   Products: ${stats.products}`);
-      console.log(`   Active Products: ${stats.activeProducts}`);
-      console.log(`   Settings: ${stats.settings}`);
-    }
-
-    if (!isEmpty) {
-      console.log('\n⚠️  Database is not empty!');
-      console.log('   To seed with sample data, use: npm run seed-db -- --force');
-      console.log('   To reset database, use: npm run reset-db');
-      return;
-    }
-
-    // Seed the database
-    console.log('\n🌱 Seeding database with sample data...');
-    const result = await seedDatabase();
-
+    await seedDatabase();
     console.log('\n✅ Database setup completed successfully!');
-    console.log(`   Created ${result.products} products`);
-    console.log(`   Created ${result.settings} settings document`);
-    
     console.log('\n🎉 You can now:');
     console.log('   • Visit http://localhost:3000 to see the website');
-    console.log('   • Visit http://localhost:3000/admin to manage products');
-    console.log(`   • Login with: ${process.env.ADMIN_USERNAME || 'admin'} / <votre ADMIN_PASSWORD>`);
-
+    console.log('   • Visit /admin and login with ADMIN_USERNAME / ADMIN_PASSWORD');
   } catch (error) {
-    console.error('\n❌ Error setting up database:', error);
+    console.error('\n❌ Error seeding database:', error.message || error);
+    if (!SERVICE_KEY) {
+      console.error('   Astuce : les écritures admin nécessitent SUPABASE_SERVICE_ROLE_KEY dans le .env.');
+    }
     process.exit(1);
   }
 }
@@ -416,19 +212,20 @@ async function main() {
 const args = process.argv.slice(2);
 if (args.includes('--help') || args.includes('-h')) {
   console.log(`
-ENSA OFFLINE Database Setup
+Originalfit Database Setup (Supabase)
 
 Usage:
-  npm run setup-db          # Setup database (only if empty)
-  npm run seed-db           # Seed database with sample data
-  npm run seed-db -- --force # Force seed (overwrite existing data)
-  npm run reset-db          # Reset database (clear all data)
+  npm run setup-db           # Seed database (only if empty)
+  npm run seed-db            # Seed database with sample data
+  npm run seed-db -- --force # Force seed (delete existing rows, then seed)
+  npm run reset-db           # Reset database (delete all rows)
 
-Environment Variables Required:
-  MONGODB_URI=mongodb://localhost:27017/ensaoffline
-  MONGODB_DB=ensaoffline
+Environment Variables Required (.env / .env.local):
+  SUPABASE_URL=https://VOTRE-PROJET.supabase.co
+  SUPABASE_ANON_KEY=votre-anon-key
+  SUPABASE_SERVICE_ROLE_KEY=votre-service-role-key   (recommandé pour le seed/reset)
 
-Make sure MongoDB is running before executing this script.
+SQL schema: supabase/schema.sql  (à exécuter une fois dans Supabase > SQL Editor)
   `);
   process.exit(0);
 }

@@ -1,30 +1,42 @@
 import { NextRequest } from 'next/server';
-import { connectToDatabase } from '@/lib/mongodb';
-import { CommunityText } from '@/models/CommunityText';
+import { getSupabase } from '@/lib/supabase';
 import { createResponse, createErrorResponse } from '@/lib/api-utils';
 
 export const dynamic = 'force-dynamic';
 
-// GET /api/community-text - Get approved community texts
+// GET /api/community-text - Get approved community texts (public)
 export async function GET(request: NextRequest) {
   try {
-    await connectToDatabase();
-    
+    const supabase = getSupabase();
+
     const url = new URL(request.url);
     const category = url.searchParams.get('category');
-    
-    const query: any = { isApproved: true };
+
+    let query = supabase
+      .from('community_texts')
+      .select('id, text, category, usage_count')
+      .eq('is_approved', true);
     if (category) {
-      query.category = category;
+      query = query.eq('category', category);
     }
-    
-    // Get random selection of approved texts (limit to 6 for performance)
-    const texts = await CommunityText.aggregate([
-      { $match: query },
-      { $sample: { size: 6 } },
-      { $project: { text: 1, category: 1, usageCount: 1 } }
-    ]);
-    
+
+    // Get approved texts (most used first), then emulate Mongo $sample(6)
+    const { data, error } = await query.order('usage_count', { ascending: false }).limit(60);
+
+    if (error) throw error;
+
+    const texts = ((data ?? []) as any[])
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value)
+      .slice(0, 6)
+      .map((row: any) => ({
+        _id: String(row.id),
+        text: row.text,
+        category: row.category,
+        usageCount: Number(row.usage_count ?? 0),
+      }));
+
     return createResponse(texts);
   } catch (error) {
     console.error('Error fetching community texts:', error);
@@ -35,37 +47,39 @@ export async function GET(request: NextRequest) {
 // POST /api/community-text - Submit new community text (for future admin approval)
 export async function POST(request: NextRequest) {
   try {
-    await connectToDatabase();
-    
+    const supabase = getSupabase();
+
     const body = await request.json();
     const { text, category } = body;
-    
+
     // Simple validation
     if (!text || !category || text.length > 50) {
       return createErrorResponse('Invalid text or category', 400);
     }
-    
+
     // Generate anonymous ID based on timestamp and random
     const anonymousId = `anon_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-    
-    const communityText = new CommunityText({
-      text: text.trim(),
-      category,
-      submittedBy: anonymousId,
-      isApproved: false // Requires admin approval
-    });
-    
-    await communityText.save();
-    
-    return createResponse({ 
+
+    const { data, error } = await supabase
+      .from('community_texts')
+      .insert({
+        text: String(text).trim(),
+        category,
+        submitted_by: anonymousId,
+        is_approved: false, // Requires admin approval
+      })
+      .select('id')
+      .single();
+
+    if (error) throw error;
+
+    return createResponse({
       message: 'Text submitted for review!',
-      id: communityText._id 
+      id: String(data.id),
+      _id: String(data.id),
     });
   } catch (error) {
     console.error('Error submitting community text:', error);
     return createErrorResponse('Failed to submit text', 500);
   }
 }
-
-
-

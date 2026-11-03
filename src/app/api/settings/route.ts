@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import { connectToDatabase } from '@/lib/mongodb';
-import { Settings } from '@/models/Settings';
+import { getSettings, mapSettingsRow } from '@/lib/types';
+import { getSupabase } from '@/lib/supabase';
 import { createResponse, createErrorResponse, requireAuth, validateSettingsData } from '@/lib/api-utils';
 
 // Force dynamic rendering
@@ -9,76 +9,8 @@ export const dynamic = 'force-dynamic';
 // GET /api/settings - Get application settings (public)
 export async function GET() {
   try {
-    await connectToDatabase();
-    
-    let settings = await Settings.findOne();
-    
-    // If no settings exist, create default settings
-    if (!settings) {
-      settings = new Settings({
-        productPrices: new Map(),
-        shippingFees: new Map([
-          ['Tetouan', 0],
-          ['Casablanca', 25],
-          ['Rabat', 20],
-          ['Marrakech', 30],
-          ['Fez', 25],
-          ['Agadir', 35],
-          ['Tangier', 15],
-          ['Meknes', 25],
-          ['Oujda', 30],
-          ['Kenitra', 20],
-          ['Safi', 30],
-          ['Mohammedia', 25],
-          ['Khouribga', 25],
-          ['Beni Mellal', 30],
-          ['El Jadida', 30],
-          ['Taza', 25],
-          ['Nador', 30],
-          ['Settat', 25],
-          ['Larache', 20],
-          ['Ksar El Kebir', 20],
-        ]),
-        customTextPrice: 15,
-        discountCodes: [
-          {
-            code: 'ENSA10',
-            type: 'percentage',
-            value: 10,
-            isActive: true,
-          },
-          {
-            code: 'OFFLINE5',
-            type: 'fixed',
-            value: 5,
-            isActive: true,
-          },
-        ],
-        defaultCurrency: 'MAD',
-        exchangeRate: 10,
-        isOrderingEnabled: true,
-        maintenanceMode: false,
-        contactInfo: {
-          whatsappNumber: '+212 6XX XXX XXX',
-          email: 'contact@ensaoffline.com',
-          address: 'Tetouan, Morocco',
-        },
-        socialMedia: {
-          instagram: '@ensaoffline',
-          facebook: 'ENSA OFFLINE',
-          twitter: '@ensaoffline',
-        },
-      });
-      
-      await settings.save();
-    }
-    
-    // Convert Map to Object for JSON response
-    const settingsObj = settings.toObject();
-    settingsObj.shippingFees = Object.fromEntries(settingsObj.shippingFees);
-    settingsObj.productPrices = Object.fromEntries(settingsObj.productPrices || new Map());
-    
-    return createResponse(settingsObj);
+    const settings = await getSettings();
+    return createResponse(settings);
   } catch (error) {
     console.error('Error fetching settings:', error);
     return createErrorResponse('Failed to fetch settings', 500, 'Internal Server Error');
@@ -91,11 +23,11 @@ export async function PUT(request: NextRequest) {
     // Check authentication
     const authError = requireAuth(request);
     if (authError) return authError;
-    
-    await connectToDatabase();
-    
+
+    const supabase = getSupabase();
+
     const body = await request.json();
-    
+
     // Validate input data
     const validationErrors = validateSettingsData(body);
     if (validationErrors.length > 0) {
@@ -103,55 +35,49 @@ export async function PUT(request: NextRequest) {
         details: validationErrors
       });
     }
-    
-    let settings = await Settings.findOne();
-    
-    if (!settings) {
-      // Create new settings if none exist
-      settings = new Settings();
-    }
-    
-    // Update settings fields
+
+    // Only patch provided fields; upsert guarantees the single row (id = 1)
+    const patch: Record<string, unknown> = {};
     if (body.customTextPrice !== undefined) {
-      settings.customTextPrice = body.customTextPrice;
+      patch.custom_text_price = body.customTextPrice;
     }
-    
     if (body.isOrderingEnabled !== undefined) {
-      settings.isOrderingEnabled = body.isOrderingEnabled;
+      patch.is_ordering_enabled = body.isOrderingEnabled;
     }
-    
+    if (body.maintenanceMode !== undefined) {
+      patch.maintenance_mode = body.maintenanceMode;
+    }
+    if (body.defaultCurrency !== undefined) {
+      patch.default_currency = body.defaultCurrency;
+    }
+    if (body.exchangeRate !== undefined) {
+      patch.exchange_rate = body.exchangeRate;
+    }
     if (body.shippingFees) {
-      // Convert object to Map
-      const shippingFeesMap = new Map(Object.entries(body.shippingFees));
-      settings.shippingFees = shippingFeesMap;
+      patch.shipping_fees = body.shippingFees;
     }
-    
     if (body.productPrices) {
-      // Convert object to Map
-      const productPricesMap = new Map(Object.entries(body.productPrices));
-      settings.productPrices = productPricesMap;
+      patch.product_prices = body.productPrices;
     }
-    
     if (body.discountCodes) {
-      settings.discountCodes = body.discountCodes;
+      patch.discount_codes = body.discountCodes;
     }
-    
     if (body.contactInfo) {
-      settings.contactInfo = body.contactInfo;
+      patch.contact_info = body.contactInfo;
     }
-    
     if (body.socialMedia) {
-      settings.socialMedia = body.socialMedia;
+      patch.social_media = body.socialMedia;
     }
-    
-    const updatedSettings = await settings.save();
-    
-    // Convert Map to Object for JSON response
-    const settingsObj = updatedSettings.toObject();
-    settingsObj.shippingFees = Object.fromEntries(settingsObj.shippingFees);
-    settingsObj.productPrices = Object.fromEntries(settingsObj.productPrices || new Map());
-    
-    return createResponse(settingsObj);
+
+    const { data, error } = await supabase
+      .from('settings')
+      .upsert({ id: 1, ...patch })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return createResponse(mapSettingsRow(data));
   } catch (error) {
     console.error('Error updating settings:', error);
     return createErrorResponse('Failed to update settings', 500, 'Internal Server Error');

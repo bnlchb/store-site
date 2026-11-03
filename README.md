@@ -9,7 +9,7 @@
 [![Next.js 14](https://img.shields.io/badge/Next.js-14.black?style=for-the-badge&logo=Next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-38BDF8?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-00ED64?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
 
 </div>
 
@@ -47,7 +47,7 @@ Les anciennes routes ENSA redirigent vers les nouvelles ancres (`/products → /
 
 - **Framework** : Next.js 14 App Router, TypeScript, React Server Components.
 - **Styling** : Tailwind CSS — palette éditoriale `bone #F2EFE6`, `ink #111110`, accent `volt #C24657`.
-- **Données** : MongoDB + Mongoose (Product, Order, Settings…).
+- **Données** : Supabase (PostgreSQL) via `@supabase/supabase-js` — tables `products`, `orders`, `settings`, `community_texts` (schéma : `supabase/schema.sql`).
 - **État** : React Context (`SelectionContext`, localStorage `originalfit-selection-v1`).
 - **SEO** : metadata, sitemap, robots.txt, données structurées, image OG générée via sharp.
 
@@ -62,8 +62,7 @@ src/
 │  ├─ originalfit/       # SiteHeader, Hero, About, Styles, HowItWorks, Contact, Footer, ProductArt
 │  └─ admin/             # Suite admin conservée (legacy ENSA)
 ├─ contexts/             # SelectionContext (Ma sélection), AuthContext
-├─ lib/                  # inspirations.ts, brand.ts, database-seeder.ts
-└─ models/               # Modèles Mongoose
+└─ lib/                  # supabase.ts, types.ts, database-seeder.ts, sample-data.json, inspirations.ts, brand.ts
 public/
 ├─ images/originalfit/   # Visuels d'inspiration
 └─ images/products/      # Visuels produits (dossier product → 20 images)
@@ -86,13 +85,18 @@ npm run dev
 Créez un fichier `.env.local` :
 
 ```
-MONGODB_URI=mongodb://localhost:27017/originalfit
+SUPABASE_URL=https://votre-projet.supabase.co
+SUPABASE_ANON_KEY=votre-anon-key
+SUPABASE_SERVICE_ROLE_KEY=votre-service-role-key
 CLOUDINARY_CLOUD_NAME=...
 CLOUDINARY_API_KEY=...
 CLOUDINARY_API_SECRET=...
 ```
 
-### Peupler la base (26 produits d'exemple)
+### Peupler la base (produits d'exemple)
+
+1. Exécutez une fois le schéma SQL : `supabase/schema.sql` dans **Supabase > SQL Editor**.
+2. Puis :
 
 ```bash
 npm run seed-db

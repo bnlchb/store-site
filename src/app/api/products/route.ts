@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
-import { connectToDatabase } from '@/lib/mongodb';
-import { Product } from '@/models/Product';
+import { getSupabase } from '@/lib/supabase';
+import { mapProductRow, productInputToRow } from '@/lib/types';
 import { createResponse, createErrorResponse, requireAuth, validateProductData } from '@/lib/api-utils';
 
 // Force dynamic rendering
@@ -9,43 +9,51 @@ export const dynamic = 'force-dynamic';
 // GET /api/products - Get all active products (public)
 export async function GET(request: NextRequest) {
   try {
-    await connectToDatabase();
-    
+    const supabase = getSupabase();
+
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category');
     const search = searchParams.get('search');
-    const limit = parseInt(searchParams.get('limit') || '50');
-    const page = parseInt(searchParams.get('page') || '1');
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50') || 50, 100);
+    const page = Math.max(parseInt(searchParams.get('page') || '1') || 1, 1);
     const skip = (page - 1) * limit;
 
     // Build query
-    const query: any = { isActive: true };
-    
+    let query = supabase
+      .from('products')
+      .select('*', { count: 'exact' })
+      .eq('is_active', true);
+
     if (category) {
-      query.category = category;
+      query = query.eq('category', category);
     }
-    
+
     if (search) {
-      query.$text = { $search: search };
+      // Recherche simple type ILIKE sur nom + description (sécurisée :
+      // on retire les caractères spéciaux de PostgREST).
+      const clean = search.replace(/[,()%*]/g, ' ').trim();
+      if (clean) {
+        query = query.or(`name.ilike.%${clean}%,description.ilike.%${clean}%`);
+      }
     }
 
     // Get products with pagination
-    const products = await Product.find(query)
-      .select('-__v')
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(Math.min(limit, 100));
+    const { data, error, count } = await query
+      .order('created_at', { ascending: false })
+      .range(skip, skip + limit - 1);
 
-    // Get total count for pagination
-    const totalCount = await Product.countDocuments(query);
+    if (error) throw error;
+
+    const products = (data ?? []).map(mapProductRow);
+    const total = count ?? products.length;
 
     return createResponse({
       products,
       pagination: {
         page,
         limit,
-        total: totalCount,
-        pages: Math.ceil(totalCount / limit),
+        total,
+        pages: Math.ceil(total / limit) || 1,
       },
     });
   } catch (error) {
@@ -60,11 +68,11 @@ export async function POST(request: NextRequest) {
     // Check authentication
     const authError = requireAuth(request);
     if (authError) return authError;
-    
-    await connectToDatabase();
-    
+
+    const supabase = getSupabase();
+
     const body = await request.json();
-    
+
     // Validate input data
     const validationErrors = validateProductData(body);
     if (validationErrors.length > 0) {
@@ -72,25 +80,17 @@ export async function POST(request: NextRequest) {
         details: validationErrors
       });
     }
-    
+
     // Create new product
-    const product = new Product({
-      name: body.name.trim(),
-      description: body.description?.trim(),
-      price: body.price,
-      images: body.images || [],
-      sizes: body.sizes,
-      category: body.category?.trim(),
-      isCustomizable: body.isCustomizable || false,
-      customPrice: body.customPrice || 0,
-      isActive: body.isActive !== undefined ? body.isActive : true,
-      stock: body.stock || 0,
-      tags: body.tags || [],
-    });
-    
-    const savedProduct = await product.save();
-    
-    return createResponse(savedProduct, 201);
+    const { data, error } = await supabase
+      .from('products')
+      .insert(productInputToRow(body))
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return createResponse(mapProductRow(data), 201);
   } catch (error) {
     console.error('Error creating product:', error);
     return createErrorResponse('Failed to create product', 500, 'Internal Server Error');
